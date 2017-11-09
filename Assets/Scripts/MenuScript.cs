@@ -6,6 +6,8 @@ using UnityEngine.SceneManagement;
 public class MenuScript : MonoBehaviour {
     Ray GazeRay;
     RaycastHit GazeHit;
+    float SecondsToClick = 1f;
+    float? GazeStart;
 	// Use this for initialization
 	void Start () {
 		
@@ -18,19 +20,35 @@ public class MenuScript : MonoBehaviour {
         {
             if (GazeHit.transform.GetComponent<UnityEngine.UI.Button>())
             {
-                Debug.Log("Hit Button");
-                Material mat = GazeHit.transform.GetComponent<CanvasRenderer>().GetMaterial();
-                mat.color = Color.red;
-                if (GvrControllerInput.ClickButtonDown)
+                if (GazeStart == null)
                 {
-                    LoadMainLevel();
+                    GazeStart = Time.time;
+                }
+                if (GvrControllerInput.ClickButtonDown || (Time.time >= GazeStart + SecondsToClick))
+                {
+                    if (GazeHit.collider.gameObject.name == "Start Button" || GazeHit.collider.gameObject.name == "Restart Button")
+                    {
+                        LoadMainLevel();
+                    }
+                    if(GazeHit.collider.gameObject.name == "Quit Button")
+                    {
+                        Application.Quit();
+                    }
                 }
             }
+            else
+            {
+                GazeStart = null;
+            }
         }
-	}
+        else
+        {
+            GazeStart = null;
+        }
+    }
 
     void LoadMainLevel()
     {
-        SceneManager.LoadScene("Main Scene");
+        SceneManager.LoadScene(1);
     }
 }

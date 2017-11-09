@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class FloorScript : MonoBehaviour {
     List<GameObject> FallenObjects = new List<GameObject>();
-    public int FallenNum;
+    public int FallenNum = 0;
 	// Use this for initialization
 	void Start () {
 		
