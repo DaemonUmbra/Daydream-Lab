@@ -10,7 +10,7 @@ public class GameManager : MonoBehaviour {
     Text HitText;
     int CubesFallen;
     int CubesHit;
-    float SecsLeft = 5f;
+    public float SecsLeft = 60f;
     GameObject RestartButton;
     GameObject QuitButton;
 	// Use this for initialization
@@ -49,8 +49,11 @@ public class GameManager : MonoBehaviour {
         }
         else
         {
-            RestartButton.SetActive(true);
-            QuitButton.SetActive(true);
+            if (!RestartButton.activeSelf || !QuitButton.activeSelf)
+            {
+                RestartButton.SetActive(true);
+                QuitButton.SetActive(true);
+            }
         }
     }
 }

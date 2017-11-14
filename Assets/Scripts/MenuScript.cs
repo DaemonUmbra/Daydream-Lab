@@ -1,16 +1,19 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.UI;
 
 public class MenuScript : MonoBehaviour {
     Ray GazeRay;
     RaycastHit GazeHit;
     float SecondsToClick = 1f;
-    float? GazeStart;
+    float? GazeStart = null;
+    Text DebugText;
 	// Use this for initialization
 	void Start () {
-		
+        DebugText = GameObject.Find("Debug Text").GetComponent<Text>();
 	}
 	
 	// Update is called once per frame
@@ -26,13 +29,15 @@ public class MenuScript : MonoBehaviour {
                 }
                 if (GvrControllerInput.ClickButtonDown || (Time.time >= GazeStart + SecondsToClick))
                 {
-                    if (GazeHit.collider.gameObject.name == "Start Button" || GazeHit.collider.gameObject.name == "Restart Button")
+                    if (GazeHit.collider.transform.name == "Start Button" || GazeHit.collider.transform.name == "Restart Button")
                     {
+                        GazeStart = null;
                         LoadMainLevel();
                     }
-                    if(GazeHit.collider.gameObject.name == "Quit Button")
+                    if(GazeHit.collider.transform.name == "Quit Button")
                     {
-                        Application.Quit();
+                        GazeStart = null;
+                        Quit();
                     }
                 }
             }
@@ -47,7 +52,12 @@ public class MenuScript : MonoBehaviour {
         }
     }
 
-    void LoadMainLevel()
+    public void Quit()
+    {
+        Application.Quit();
+    }
+
+    public void LoadMainLevel()
     {
         SceneManager.LoadScene(1);
     }
